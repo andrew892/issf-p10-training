@@ -1,0 +1,27 @@
+{
+    "name": "P10 Simulatore Gara",
+    "short_name": "P10",
+    "description": "Simulatore gare pistola 10 metri",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0d0d0d",
+    "theme_color": "#d4a017",
+    "lang": "it",
+    "icons": [
+        {
+            "src": "/assets/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/assets/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [],
+    "categories": ["sports", "utilities"]
+}
