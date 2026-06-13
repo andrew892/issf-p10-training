@@ -129,6 +129,8 @@ export function renderReport(report, { isAborted = false, sessionDate = null } =
         </div>
     `).join('');
 
+    const shotsTableSection = shotsTableHtml(series.flatMap(s => s.shots));
+
     const rosateSection = hasGroupData ? `
         <div class="report-section">
             <div class="report-section-title">Rosate</div>
@@ -167,6 +169,7 @@ export function renderReport(report, { isAborted = false, sessionDate = null } =
                 <tbody>${seriesRows}</tbody>
             </table>
         </div>
+        ${shotsTableSection}
         ${rosateSection}
 
         <div class="report-section">
@@ -243,6 +246,44 @@ export function initRosataZoom() {
             overlay.classList.remove('hidden');
         });
     });
+}
+
+// Scheda colpi: 12 righe da 5 colpi, con colonna somme per cinquina e colonna
+// (celle unite a 2 righe) per le somme di ogni serie da 10 colpi.
+function shotsTableHtml(allShots) {
+    if (allShots.length === 0) return '';
+
+    const rows = [];
+    for (let r = 0; r < 12; r++) {
+        const rowShots = allShots.slice(r * 5, r * 5 + 5);
+        if (rowShots.length === 0) break;
+
+        const cells = rowShots.map(sh => {
+            const label = sh.isMouche ? 'X' : String(sh.value);
+            return `<td class="shot-cell">${label}</td>`;
+        }).join('') + '<td class="shot-cell"></td>'.repeat(5 - rowShots.length);
+
+        const sum5 = rowShots.reduce((s, sh) => s + sh.value, 0);
+        const sum5Cell = `<td class="sum5-cell">${sum5}</td>`;
+
+        let sum10Cell = '';
+        if (r % 2 === 0) {
+            const tenShots = allShots.slice(r * 5, r * 5 + 10);
+            const sum10 = tenShots.reduce((s, sh) => s + sh.value, 0);
+            sum10Cell = `<td class="sum10-cell" rowspan="2">${sum10}</td>`;
+        }
+
+        const rowClass = r % 2 === 1 ? ' class="series-end"' : '';
+        rows.push(`<tr${rowClass}>${cells}${sum5Cell}${sum10Cell}</tr>`);
+    }
+
+    return `
+    <div class="report-section">
+        <div class="report-section-title">Scheda colpi</div>
+        <table class="shots-table">
+            <tbody>${rows.join('')}</tbody>
+        </table>
+    </div>`;
 }
 
 function fmtAvg(ms) {

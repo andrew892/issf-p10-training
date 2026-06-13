@@ -401,6 +401,15 @@ p { line-height: 1.5; }
 .series-mouches { color: var(--mouche); font-size: .85rem; }
 .series-time { color: var(--text-muted); font-size: .85rem; }
 .series-avg { color: var(--text-muted); font-size: .8rem; }
+.shots-table { width: 100%; border-collapse: collapse; text-align: center; font-size: .85rem; }
+.shots-table td { border: 1px solid var(--border); padding: 6px 2px; }
+.shots-table .shot-cell { width: 14%; font-weight: 600; }
+.shots-table .sum5-cell { width: 15%; font-weight: 700; background: var(--surface2); }
+.shots-table .sum10-cell {
+    width: 15%; font-weight: 900; background: var(--surface2);
+    color: var(--primary); font-size: 1rem;
+}
+.shots-table tr.series-end td { border-bottom: 4px solid var(--border); }
 .rosate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
 .rosata-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: zoom-in; }
 .rosata-item svg { width: 100%; max-width: 140px; aspect-ratio: 1; }

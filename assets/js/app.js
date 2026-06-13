@@ -464,6 +464,7 @@ function renderTargetInputMarkup() {
                 <svg id="loupe-svg" class="loupe-svg" viewBox="0 0 64 64">
                     <g id="loupe-pan">
                         <g id="loupe-rings"></g>
+                        <g id="loupe-persisted-shots" class="persisted-shots"></g>
                         <circle id="loupe-marker" class="loupe-marker" r="${BULLET_RADIUS_MM}" />
                     </g>
                 </svg>
@@ -621,29 +622,34 @@ function refreshTargetPersistedShots() {
     const config = Comp.getConfig();
     if (config.scoreMode !== 'group') return;
     const g = document.getElementById('target-persisted-shots');
+    const loupeG = document.getElementById('loupe-persisted-shots');
     if (!g) return;
 
     const phase = Comp.getPhase();
     const dot = sh => `<circle cx="${sh.x}" cy="${sh.y}" r="${BULLET_RADIUS_MM}" fill="var(--accent)" />`;
+    const setMarkup = markup => {
+        g.innerHTML = markup;
+        if (loupeG) loupeG.innerHTML = markup;
+    };
 
     if (phase === 'trial') {
         // In prova i colpi restano sempre visibili in trasparenza, indipendentemente
         // da "mostra somme parziali" (quell'opzione riguarda solo la gara).
-        g.innerHTML = Comp.getTrialShots()
+        setMarkup(Comp.getTrialShots()
             .filter(sh => sh.x != null && sh.y != null)
             .map(dot)
-            .join('');
+            .join(''));
         return;
     }
 
-    if (phase !== 'competition' || !config.showPartials) { g.innerHTML = ''; return; }
+    if (phase !== 'competition' || !config.showPartials) { setMarkup(''); return; }
     const shots = Comp.getCompShots();
-    if (shots.length === 0) { g.innerHTML = ''; return; }
+    if (shots.length === 0) { setMarkup(''); return; }
     const curSeries = shots[shots.length - 1].seriesNumber;
-    g.innerHTML = shots
+    setMarkup(shots
         .filter(sh => sh.seriesNumber === curSeries && sh.x != null && sh.y != null)
         .map(dot)
-        .join('');
+        .join(''));
 }
 
 function updateCompUI() {
